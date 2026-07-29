@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}BMI Calculator - MedalyZe{% endblock %}
+
+{% block content %}
+<div class="bmi-page">
+    <div class="bmi-card">
+        <div class="bmi-card-header">
+            <h2>Body Mass Index Calculator</h2>
+            <p>Calculate your BMI in seconds to understand your weight category and receive health recommendations.</p>
+        </div>
+        
+        <div class="bmi-grid">
+            <!-- Input Side -->
+            <div class="bmi-form-side">
+                <div class="bmi-input-group">
+                    <label for="height">Height</label>
+                    <div class="bmi-input-wrapper">
+                        <input type="number" id="height" min="50" max="250" placeholder="e.g. 175" required>
+                        <span class="bmi-unit">cm</span>
+                    </div>
+                </div>
+                
+                <div class="bmi-input-group">
+                    <label for="weight">Weight</label>
+                    <div class="bmi-input-wrapper">
+                        <input type="number" id="weight" min="10" max="300" placeholder="e.g. 70" required>
+                        <span class="bmi-unit">kg</span>
+                    </div>
+                </div>
+                
+                <button class="cta-button bmi-btn" onclick="calculateBMI()">
+                    <i class="fas fa-calculator"></i> Calculate BMI
+                </button>
+            </div>
+            
+            <!-- Result Side -->
+            <div class="bmi-result-side">
+                <div class="bmi-result-card">
+                    <p class="bmi-result-info" style="margin-top: 0; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;">Your Results</p>
+                    <div class="bmi-number" id="result-number">--</div>
+                    <div class="bmi-status-label" id="result-status" style="background-color: var(--border); color: var(--text-muted);">
+                        Enter metrics
+                    </div>
+                    
+                    <!-- Gauge visual scale -->
+                    <div class="bmi-scale-bar">
+                        <div class="bmi-scale-pointer" id="bmi-pointer" style="left: 50%;"></div>
+                    </div>
+                    
+                    <div class="bmi-scale-labels">
+                        <span>15.0</span>
+                        <span>18.5</span>
+                        <span>25.0</span>
+                        <span>30.0</span>
+                        <span>35.0</span>
+                    </div>
+                    
+                    <p class="bmi-result-info" id="result-info" style="margin-top: 24px; font-size: 0.95rem; line-height: 1.5;">
+                        Please enter your height in centimeters and weight in kilograms to view your evaluation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculateBMI() {
+    var h = parseFloat(document.getElementById('height').value);
+    var w = parseFloat(document.getElementById('weight').value);
+    
+    var resultNum = document.getElementById('result-number');
+    var resultStatus = document.getElementById('result-status');
+    var resultInfo = document.getElementById('result-info');
+    var pointer = document.getElementById('bmi-pointer');
+    
+    if (!h || !w || isNaN(h) || isNaN(w) || h <= 50 || w <= 10) {
+        resultNum.innerText = "--";
+        resultStatus.innerText = "Invalid Input";
+        resultStatus.style.backgroundColor = "var(--border)";
+        resultStatus.style.color = "var(--text-muted)";
+        resultInfo.innerText = "Please enter realistic height and weight values.";
+        pointer.style.left = "50%";
+        return;
+    }
+    
+    var bmiValue = w / ((h / 100) ** 2);
+    var result = bmiValue.toFixed(1);
+    resultNum.innerText = result;
+    
+    var status = "";
+    var color = "";
+    var infoText = "";
+    var pct = 0;
+    
+    if (bmiValue < 18.5) {
+        status = "Underweight";
+        color = "var(--health-yellow)";
+        infoText = "Your BMI indicates you are underweight. Consider discussing nutrition with a health professional.";
+        // Map 15 to 18.5 to 0% to 25%
+        pct = Math.max(0, Math.min(25, ((bmiValue - 15) / 3.5) * 25));
+    } else if (bmiValue < 25.0) {
+        status = "Healthy Weight";
+        color = "var(--health-green)";
+        infoText = "Excellent! You are within the recommended healthy weight range for your height.";
+        // Map 18.5 to 25 to 25% to 50%
+        pct = 25 + Math.max(0, Math.min(25, ((bmiValue - 18.5) / 6.5) * 25));
+    } else if (bmiValue < 30.0) {
+        status = "Overweight";
+        color = "var(--health-orange)";
+        infoText = "Your BMI suggests you are overweight. A balanced diet and regular physical activity can support your health goals.";
+        // Map 25 to 30 to 50% to 75%
+        pct = 50 + Math.max(0, Math.min(25, ((bmiValue - 25) / 5) * 25));
+    } else {
+        status = "Obese";
+        color = "var(--health-red)";
+        infoText = "Your BMI is classified as obese. Consulting a medical practitioner is recommended to establish healthy steps forward.";
+        // Map 30 to 35 to 75% to 100%
+        pct = 75 + Math.max(0, Math.min(25, ((bmiValue - 30) / 5) * 25));
+    }
+    
+    resultStatus.innerText = status;
+    resultStatus.style.backgroundColor = color;
+    resultStatus.style.color = "white";
+    resultInfo.innerText = infoText;
+    pointer.style.left = pct + "%";
+}
+</script>
+{% endblock %}
+
+
+
+

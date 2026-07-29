@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .bmi-calculator {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        .bmi-calculator h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .unit-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .unit-toggle button {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .unit-toggle button.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .bmi-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .bmi-category {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .bmi-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .bmi-scale {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bmi-calculator {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .bmi-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body><!-- Enhanced Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                 <img src="{{ url_for('static', filename='icons/logo.png') }}   " alt="symptom-checker icon">      
+              
+             <span>MedalyZe</span>
+            </a>
+
+            <!-- <a href="#" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                MedalyZe
+            </a> -->
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#services" class="nav-link">
+                        <i class="fas fa-stethoscope"></i> Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#doctors" class="nav-link">
+                        <i class="fas fa-user-md"></i> Doctors
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a href="#appointment" class="nav-link cta-button">
+                        <i class="fas fa-calendar-plus"></i> Book Now
+                    </a>
+                </li> -->
+            </ul>
+            
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="bmi-calculator">
+        <h2>BMI Calculator</h2>
+        
+        <div class="unit-toggle">
+            <button onclick="setUnits('metric')" class="active" id="metric-btn">Metric</button>
+            <button onclick="setUnits('imperial')" id="imperial-btn">Imperial</button>
+        </div>
+
+        <form id="bmi-form">
+            <div class="input-group">
+                <label for="height">Height</label>
+                <div class="input-row">
+                    <input type="number" id="height" placeholder="Enter height in cm" step="0.1" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="weight">Weight</label>
+                <div class="input-row">
+                    <input type="number" id="weight" placeholder="Enter weight in kg" step="0.1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="calculate-btn">Calculate BMI</button>
+        </form>
+
+        <div class="result" id="result">
+            <div class="bmi-value" id="bmi-value">0.0</div>
+            <div class="bmi-category" id="bmi-category">Normal Weight</div>
+            <div class="bmi-description" id="bmi-description">Your BMI indicates a healthy weight range.</div>
+            <div class="bmi-scale">
+                <strong>BMI Categories:</strong><br>
+                Underweight: Below 18.5<br>
+                Normal: 18.5 - 24.9<br>
+                Overweight: 25.0 - 29.9<br>
+                Obese: 30.0 and above
+            </div>
+        </div>
+
+        <div class="error" id="error"></div>
+    </div> <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Company Info -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-heartbeat"></i> MedalyZe</h3>
+                    <p style="color: #bdc3c7; margin-bottom: 1.5rem;">Your trusted partner in healthcare. We connect patients with qualified medical professionals, making healthcare accessible and convenient for everyone.</p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#services"><i class="fas fa-stethoscope"></i> Our Services</a></li>
+                        <li><a href="#doctors"><i class="fas fa-user-md"></i> Find Doctors</a></li>
+                        <li><a href="#appointment"><i class="fas fa-calendar-plus"></i> Book Appointment</a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div class="footer-section">
+                    <h3>Medical Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-heartbeat"></i> Cardiology</a></li>
+                        <li><a href="#"><i class="fas fa-brain"></i> Neurology</a></li>
+                        <li><a href="#"><i class="fas fa-bone"></i> Orthopedics</a></li>
+                        <li><a href="#"><i class="fas fa-eye"></i> Ophthalmology</a></li>
+                        <li><a href="#"><i class="fas fa-child"></i> Pediatrics</a></li>
+                        <li><a href="#"><i class="fas fa-female"></i> Gynecology</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Newsletter -->
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Shaitan Gali, Khatra Mehel, Andar Nagar, Medical District, pin-171469</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+919999XXX888</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@MedalyZe.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>24/7 Emergency Support</span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="newsletter">
+                        <h4 style="color: #4ecdc4; margin-bottom: 0.5rem;">Stay Updated</h4>
+                        <p>Subscribe to our newsletter for health tips and updates.</p>
+                        <form class="newsletter-form">
+                            <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                            <button type="submit" class="newsletter-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; 2025 MedalyZe. All rights reserved. | Connecting Health, Connecting Lives</p>
+                    </div>
+                    <ul class="footer-bottom-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        let currentUnit = 'metric';
+
+        function setUnits(unit) {
+            currentUnit = unit;
+            const metricBtn = document.getElementById('metric-btn');
+            const imperialBtn = document.getElementById('imperial-btn');
+            const heightInput = document.getElementById('height');
+            const weightInput = document.getElementById('weight');
+
+            if (unit === 'metric') {
+                metricBtn.classList.add('active');
+                imperialBtn.classList.remove('active');
+                heightInput.placeholder = 'Enter height in cm';
+                weightInput.placeholder = 'Enter weight in kg';
+            } else {
+                imperialBtn.classList.add('active');
+                metricBtn.classList.remove('active');
+                heightInput.placeholder = 'Enter height in inches';
+                weightInput.placeholder = 'Enter weight in lbs';
+            }
+
+            // Clear previous results
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('error').textContent = '';
+        }
+
+        function calculateBMI(weight, height, unit) {
+            let bmi;
+            
+            if (unit === 'metric') {
+                // BMI = weight(kg) / height(m)²
+                const heightInMeters = height / 100;
+                bmi = weight / (heightInMeters * heightInMeters);
+            } else {
+                // BMI = (weight(lbs) / height(inches)²) × 703
+                bmi = (weight / (height * height)) * 703;
+            }
+            
+            return parseFloat(bmi.toFixed(1));
+        }
+
+        function getBMICategory(bmi) {
+            if (bmi < 18.5) {
+                return {
+                    category: 'Underweight',
+                    description: 'Your BMI indicates you may be underweight. Consider consulting with a healthcare provider.',
+                    color: '#74b9ff'
+                };
+            } else if (bmi >= 18.5 && bmi < 25) {
+                return {
+                    category: 'Normal Weight',
+                    description: 'Your BMI indicates a healthy weight range. Keep up the good work!',
+                    color: '#00b894'
+                };
+            } else if (bmi >= 25 && bmi < 30) {
+                return {
+                    category: 'Overweight',
+                    description: 'Your BMI indicates you may be overweight. Consider a balanced diet and regular exercise.',
+                    color: '#fdcb6e'
+                };
+            } else {
+                return {
+                    category: 'Obese',
+                    description: 'Your BMI indicates obesity. Consider consulting with a healthcare provider for guidance.',
+                    color: '#e17055'
+                };
+            }
+        }
+
+        document.getElementById('bmi-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const errorDiv = document.getElementById('error');
+            
+            // Clear previous error
+            errorDiv.textContent = '';
+            
+            // Validation
+            if (!height || !weight || height <= 0 || weight <= 0) {
+                errorDiv.textContent = 'Please enter valid height and weight values.';
+                return;
+            }
+            
+            // Additional validation based on units
+            if (currentUnit === 'metric') {
+                if (height < 50 || height > 300) {
+                    errorDiv.textContent = 'Height should be between 50-300 cm.';
+                    return;
+                }
+                if (weight < 10 || weight > 500) {
+                    errorDiv.textContent = 'Weight should be between 10-500 kg.';
+                    return;
+                }
+            } else {
+                if (height < 20 || height > 120) {
+                    errorDiv.textContent = 'Height should be between 20-120 inches.';
+                    return;
+                }
+                if (weight < 20 || weight > 1100) {
+                    errorDiv.textContent = 'Weight should be between 20-1100 lbs.';
+                    return;
+                }
+            }
+            
+            const bmi = calculateBMI(weight, height, currentUnit);
+            const categoryInfo = getBMICategory(bmi);
+            
+            // Display results
+            document.getElementById('bmi-value').textContent = bmi;
+            document.getElementById('bmi-value').style.color = categoryInfo.color;
+            document.getElementById('bmi-category').textContent = categoryInfo.category;
+            document.getElementById('bmi-description').textContent = categoryInfo.description;
+            document.getElementById('result').classList.add('show');
+        });
+
+        // Allow Enter key to calculate
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('bmi-form').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+   <script href="{{ url_for('static', filename='js/script.js') }}" ></script>
+</body>
+</html>

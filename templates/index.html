@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}Home - MedalyZe{% endblock %}
+
+{% block content %}
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="symptom-checker" class="hero-section">
+            <div class="hero-content">
+                <h1>AI-Powered Symptom Analysis</h1>
+                <p>Understand your health concerns instantly. MedalyZe uses advanced clinical intelligence to analyze symptoms and connect you with qualified doctors in your area.</p>
+                <button class="cta-button" onclick="openSymptomChecker()">
+                    <i class="fas fa-stethoscope"></i> Start Symptom Checker
+                </button>
+            </div>
+            <div class="hero-image">
+                <img src="{{ url_for('static', filename='icons/custom_icon.svg') }}" alt="symptom-checker icon" class="medical-icon-img">
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="feature-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <circle cx="11" cy="11" r="3" fill="currentColor" opacity="0.3"></circle>
+                        </svg>
+                    </div>
+                    <h3>Smart Analysis</h3>
+                    <p>Advanced AI-powered symptom analysis matching thousands of conditions for accurate, clinically grounded insights.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3>Instant Results</h3>
+                    <p>Get immediate assessment results, health recommendations, and clear guidance in a matter of seconds.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon-container">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3>Private & Secure</h3>
+                    <p>Your search logs and personal medical inputs are fully encrypted and stored securely. Your data is always yours.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Enter Symptoms</h3>
+                    <p>Add symptoms using natural language to build your custom medical profile.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our enhanced models compute probabilistic condition matches based on database references.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Get Results</h3>
+                    <p>Receive recommendations and find specialized, active practitioners nearby.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is a symptom checker?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>A symptom checker is a clinical reference tool that evaluates user-provided inputs to generate matching medical conditions. It serves as an informative starting point to assist your conversations with healthcare professionals. Whether dealing with a common cold, seasonal allergies, or chronic fatigue, it highlights likely avenues of inquiry.</p>
+                    </div>
+                </div> 
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How does the symptom checker work?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our checker uses advanced natural language processing. By entering everyday terminology and answering simple profile questions, the algorithm queries a secure database of conditions, running machine learning classifications to output primary indicators and recommendations.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How accurate is the symptom checker?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>The system is highly accurate at mapping standard symptoms to clinical guidelines. However, it cannot perform actual diagnosis. It is strictly an informational tool to aid in preparation for clinical visits.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is my health information secure?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. All user inputs are handled client-side or transmitted via encrypted endpoints. We do not persist identifiable medical profiles or share information with advertising networks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <div class="center-wrapper">
+             <div class="contact-section">
+                 <h2 class="contact-heading">Still have questions?</h2>
+                 <p class="contact-subtext">We are here to support your search. Reach out to our team at any time.</p>
+                 <a href="#contact" class="contact-btn"><i class="fas fa-envelope"></i> Contact Us</a>
+             </div>
+        </div>
+    </main>
+
+    <!-- Symptom Checker Modal -->
+    <div id="symptomModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Symptom Checker</h2>
+                <button class="modal-close" onclick="closeSymptomChecker()" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="symptom-input-section">
+                    <label for="symptomInput">Enter your symptoms:</label>
+                    <div class="input-group">
+                        <input type="text" id="symptomInput" placeholder="e.g., headache, fever, cough">
+                        <button onclick="addSymptom()"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                    <div id="symptomTags" class="symptom-tags"></div>
+                </div>
+                
+                <button id="analyzeBtn" onclick="analyzeSymptoms()" disabled class="btn-primary">
+                    <i class="fas fa-microchip"></i> Analyze Symptoms
+                </button>
+                
+                <div id="aiDiseaseInfo" style="display: none;">
+                    <!-- Filled dynamically by script.js -->
+                </div>
+
+                <div id="analysisResults" style="display: none; margin-top: 24px;">
+                    <h3 style="color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--border); padding-bottom: 8px;">Possible Alternative Conditions</h3>
+                    <div id="conditionsList" class="conditions-list"></div>
+                </div>
+
+                <div class="disclaimer-box">
+                    <p><strong><i class="fas fa-exclamation-triangle"></i> Disclaimer:</strong> This information is for educational purposes only and should not replace professional medical advice. Please consult with a healthcare provider for proper diagnosis and treatment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

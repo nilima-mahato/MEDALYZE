@@ -1,0 +1,175 @@
+# 🩺 MedalyZe – AI-Powered Symptom Checker & Doctor Finder
+
+MedalyZe is an AI-based healthcare assistant that predicts diseases from symptoms, suggests treatments, recommends doctors, and provides a BMI calculator – all within a clean, responsive web interface.
+
+---
+
+## 🔍 Features
+
+- ✅ **AI Disease Predictor** (Symptom → Disease)
+- 👨‍⚕️ **Doctor Finder** (Symptom/Disease → Specialty → Doctor)
+- ⚖️ **BMI Calculator** (with UI feedback)
+- 💊 **Treatment & Diet Info** per disease
+- 📱 Fully **Responsive UI** with animation
+- 🧪 **Unit & Integration Testing**
+- 📦 **Docker Support** for easy deployment
+
+---
+
+
+Project Structure
+
+```
+MedalyZe/
+├── templates/
+│   ├── base.html              # Shared layout
+│   ├── index.html             # Homepage – symptom checker
+│   ├── bmi.html               # BMI calculator
+│   └── doctor.html            # Doctor finder
+│
+├── static/
+│   ├── styles.css             # Custom styling
+│   ├── script.js              # Frontend logic
+│   └── icons/                 # logo.png, custom_icon.svg, background.jpg
+│
+├── data/
+│   ├── decease.csv            # Symptom → Disease
+│   ├── med.csv                # Disease → Medical Info
+│   ├── kolkata_doctors_dataset.csv   # Doctor DB
+│   └── symptom_specialty_data.csv    # Symptom → Specialty
+│
+├── main_app.py                # Flask API backend
+├── config.py                  # App config & directories
+├── requirements.txt           # All Python dependencies
+├── venv.env                   # Environment variables (sample)
+├── dockerfile                 # Docker container
+├── docker-compose.yml         # Docker runner
+├── train_disease.py           # Disease prediction model trainer
+├── train_doctor.py            # Doctor prediction model trainer
+├── testing_suite.py           # Full test coverage
+└── README.md                  # You are here
+```
+
+---
+
+## ⚙️ Installation
+
+###  Create a Virtual Environment
+
+```bash
+python -m venv venv
+source venv/bin/activate     # On Windows: venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Set Environment Variables
+
+Create `.env` or export manually:
+```env
+FLASK_DEBUG=False
+SECRET_KEY=your-secret-key
+LOG_LEVEL=INFO
+PORT=5000
+```
+
+---
+
+## 🤖 Train AI Models
+
+### 🔬 Train Disease Prediction Model && Train Doctor Recommendation Model
+
+```bash
+python train_disease.py;python train_doctor.py
+```
+
+- Uses `data/decease.csv`
+- Saves models in `models/`
+- Uses `data/symptom_specialty_data.csv`
+- Saves model as `doctor_model.pkl`
+
+---
+
+## 🚀 Run the App
+
+### Locally:
+
+```bash
+python main_app.py
+```
+
+Visit: [http://127.0.0.1:5000]
+
+---
+
+## 🧪 Run Tests
+
+```bash
+python testing_suite.py
+```
+
+Includes:
+- Data validation
+- Training workflow
+- Model accuracy check
+- Flask API testing
+- Integration tests
+
+---
+
+## 📦 Docker Setup (Optional)
+
+```bash
+docker-compose up --build
+```
+
+> Automatically builds and launches the Flask app in a containerized environment.
+
+---
+
+## 📡 API Endpoints
+
+| Endpoint              | Method | Description                           |
+|-----------------------|--------|---------------------------------------|
+| `/predict_disease`    | POST   | Predicts disease from user symptom    |
+| `/predict_batch`      | POST   | Predicts multiple inputs at once      |
+| `/api/doctors`        | POST   | Suggests doctors from symptom/disease |
+| `/health`             | GET    | Health check endpoint                 |
+| `/model-info`         | GET    | Shows metadata for trained model      |
+
+---
+
+## 🧠 Tech Stack
+
+- **Frontend**: HTML, CSS, JS
+- **Backend**: Flask (Python)
+- **ML Models**: scikit-learn, Naive Bayes
+- **NLP Tools**: TextBlob, TF-IDF
+- **Testing**: `unittest` + integration logic
+- **Packaging**: Docker, `.env`, config class
+
+---
+
+## 📸 UI Screens
+
+- 🏠 **Homepage**: Search bar for symptoms
+- ⚖️ **BMI Calculator**: Clean UI with result
+- 🩺 **Doctor Finder**: Search by condition/specialty
+- 📱 **Responsive Design**: Works on mobile/tablet
+
+---
+
+## 👨‍💻 Author
+
+**🧑 Katil Kabootar**  
+Made with ❤️ for AI-driven healthcare.
+
+---
+
+## 📄 License
+
+MIT – Free to use & modify.

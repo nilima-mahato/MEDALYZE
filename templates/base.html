@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MedalyZe{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Premium Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='icons/logo.png') }}" alt="MedalyZe icon">      
+                <span>MedalyZe</span>
+            </a>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                     <a href="/BMI" class="nav-link">
+                        <i class="fas fa-weight"></i> BMI Checker
+                     </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Doctor" class="nav-link">
+                        <i class="fas fa-user-md"></i> Doctors
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/about" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                </li>
+            </ul>
+            
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Premium Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Company Info -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-heartbeat"></i> MedalyZe</h3>
+                    <p>Your trusted partner in healthcare. We connect patients with qualified medical professionals, making healthcare accessible and convenient for everyone.</p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="/BMI"><i class="fas fa-stethoscope"></i> BMI Calculator</a></li>
+                        <li><a href="/Doctor"><i class="fas fa-user-md"></i> Find Doctors</a></li>
+                        <li><a href="/about"><i class="fas fa-info-circle"></i> About Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Newsletter Combined Section -->
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Health Ave, Biotech District, pin-171469</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+91 99999 88888</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@medalyze.com</span>
+                        </div>
+                    </div>
+                    <div class="newsletter">
+                        <p>Subscribe to our newsletter for health tips and updates.</p>
+                        <form class="newsletter-form">
+                            <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                            <button type="submit" class="newsletter-btn" aria-label="Subscribe">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; 2026 MedalyZe. All rights reserved. | Connecting Health, Connecting Lives</p>
+                    </div>
+                    <ul class="footer-bottom-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}Doctor - MedalyZe{% endblock %}
+
+{% block content %}
+<div class="doctor-page">
+    <!-- Hero Section -->
+    <section class="doctor-hero">
+        <div class="doctor-hero-content">
+            <h1>Find the Right Specialist</h1>
+            <p>Describe your symptoms or enter a specialty to find highly qualified doctors and clinics in Kolkata.</p>
+        </div>
+        <div class="doctor-hero-image">
+            <i class="fas fa-user-md"></i>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <h2>What symptoms or specialty are you looking for?</h2>
+        <form class="search-form" onsubmit="searchDoctors(event)">
+            <input type="text" class="search-input" id="symptomInput" placeholder="e.g., fever, skin rash, cardiologist, diabetes" required>
+            <button type="submit" class="cta-button search-btn">
+                <i class="fas fa-search"></i> Find Doctors
+            </button>
+        </form>
+        <div class="quick-symptoms">
+            <p>Or try searching for common conditions:</p>
+            <div class="symptom-chips">
+                <span class="symptom-chip" onclick="quickSearch('chest pain')">Chest Pain</span>
+                <span class="symptom-chip" onclick="quickSearch('skin rash')">Skin Rash</span>
+                <span class="symptom-chip" onclick="quickSearch('fever')">Fever</span>
+                <span class="symptom-chip" onclick="quickSearch('headache')">Headache</span>
+                <span class="symptom-chip" onclick="quickSearch('back pain')">Back Pain</span>
+                <span class="symptom-chip" onclick="quickSearch('eye pain')">Eye Pain</span>
+                <span class="symptom-chip" onclick="quickSearch('cough')">Cough</span>
+                <span class="symptom-chip" onclick="quickSearch('diabetes')">Diabetes</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Section -->
+    <section class="loading" id="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Finding recommended doctors for your symptoms...</p>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results" style="display: none;">
+        <div class="results-header">
+            <h2 id="resultsTitle">Recommended Specialists</h2>
+            <p id="resultsSubtitle">Based on your matched symptom criteria</p>
+        </div>
+        <div class="results-container">
+            <div id="doctorsList"></div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search-minus"></i>
+                <h3>No doctors found</h3>
+                <p>Try searching with different terms or contact our support team for assistance.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+async function searchDoctors(event) {
+    if (event) event.preventDefault();
+    const symptom = document.getElementById("symptomInput").value;
+    const loading = document.getElementById("loading");
+    const resultsSection = document.getElementById("results");
+    const doctorList = document.getElementById("doctorsList");
+    const noResults = document.getElementById("noResults");
+
+    loading.style.display = "flex";
+    resultsSection.style.display = "none";
+    noResults.style.display = "none";
+
+    try {
+        const response = await fetch("/api/doctors", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ symptom })
+        });
+
+        const data = await response.json();
+        loading.style.display = "none";
+        doctorList.innerHTML = "";
+
+        if (data && data.length) {
+            resultsSection.style.display = "block";
+            data.forEach(doc => {
+                doctorList.innerHTML += `
+                    <div class="doctor-card">
+                        <h3>${doc.Doctor_Name}</h3>
+                        <p><i class="fas fa-stethoscope"></i> <strong>Specialty:</strong> ${doc.Specialty}</p>
+                        <p><i class="fas fa-hospital"></i> <strong>Clinic:</strong> ${doc.Clinic_Hospital}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> <strong>Area:</strong> ${doc.Area}</p>
+                        <p><i class="fas fa-phone-alt"></i> <strong>Contact:</strong> ${doc.Contact_No}</p>
+                        <p><i class="fas fa-calendar-alt"></i> <strong>Available:</strong> ${doc.Days_Available} at ${doc.Time_Slot}</p>
+                    </div>
+                `;
+            });
+        } else {
+            resultsSection.style.display = "block";
+            noResults.style.display = "block";
+        }
+    } catch (err) {
+        console.error("Error fetching doctors:", err);
+        loading.style.display = "none";
+        resultsSection.style.display = "block";
+        noResults.style.display = "block";
+    }
+}
+
+function quickSearch(symptom) {
+    document.getElementById("symptomInput").value = symptom;
+    searchDoctors();
+}
+</script>
+{% endblock %}

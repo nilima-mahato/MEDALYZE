@@ -1,0 +1,55 @@
+🎤 MedalyZe Project Presentation Script (Group of 4)
+
+---
+
+👤 **Person 1 – Introduction & Motivation**
+
+"Good morning everyone. Today, we are excited to present our final year project titled **'MedalyZe – AI-Based Symptom Checker & Doctor Recommender'**.
+The primary motivation behind MedalyZe was to build a fast, AI-powered healthcare tool that helps users analyze their symptoms, predict possible diseases, and connect them with the right doctors – all through a web interface.
+This project is especially useful in areas where access to immediate medical advice is limited."
+
+---
+
+👤 **Person 2 – System Overview & Features**
+
+"Our system includes four major features:
+1. **Symptom-based Disease Prediction** – The user enters symptoms in plain language, and the model predicts the most likely disease.
+2. **Doctor Recommendation** – Based on the predicted disease or entered specialty, the system shows matching doctors.
+3. **BMI Calculator** – Users can calculate their Body Mass Index using a responsive UI.
+4. **Treatment Info** – Each prediction comes with treatment guidelines, precautions, and a suggested diet.
+
+The entire platform is responsive and works smoothly across devices."
+
+---
+
+👤 **Person 3 – Backend & AI Models**
+
+"Let’s talk about the AI behind the scenes.
+We built two machine learning models using the **Multinomial Naive Bayes** algorithm:
+- One model predicts diseases based on user symptom text, processed using NLP (TextBlob spell correction, TF-IDF vectorization).
+- The second model maps symptoms to doctor specialties.
+
+We trained these models using real datasets like `decease.csv` and `symptom_specialty_data.csv`.
+The backend is powered by **Flask**, with APIs handling predictions and doctor lookup dynamically.
+
+We also implemented a complete **testing suite** to validate all functionalities."
+
+---
+
+👤 **Person 4 – Demo, Architecture & Conclusion**
+
+"Here’s how the system works in real-time:
+- The user types symptoms like 'fever and headache'.
+- Flask sends this input through our trained model.
+- It returns the most probable disease, relevant medical advice, and a matching doctor.
+
+**Architecture Summary**:
+User Input → Flask Backend → NLP Preprocessing → ML Prediction → Rendered Result on UI
+
+To conclude, **MedalyZe** shows how Artificial Intelligence can be used to improve accessibility to primary healthcare services. In the future, we plan to add a chatbot interface, voice input, and support for regional languages.
+
+Thank you!"
+
+---
+
+🙌 **End Slide** – "Any Questions?"
